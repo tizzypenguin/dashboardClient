@@ -194,6 +194,7 @@ export default {
         console.log(res)
         // const data = res.data[0];
         // this.setData(data);
+        this.testData = res.data;
       });
     }
   }

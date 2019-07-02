@@ -52,8 +52,12 @@
             </fish-col>
           </fish-row>
           <fish-row>
-            <fish-col span="24">
-              <fish-input :disabled="true" class="inp-url wd100" :value="url"></fish-input>
+            <fish-col span="22">
+              <!-- <fish-input :disabled="true" class="inp-url wd100" :value="url"></fish-input> -->
+              <fish-input class="inp-url wd100" v-model="url"></fish-input>
+            </fish-col>
+            <fish-col span="2">
+              <fish-button shape="circle" v-on:click="getSite"><i class="fa fa-search"></i></fish-button>
             </fish-col>
           </fish-row>
         </fish-tab-pane>
@@ -192,10 +196,15 @@ export default {
     selectSite: function() {
       this.$http.get('/api/list').then((res) => {
         console.log(res)
-        // const data = res.data[0];
-        // this.setData(data);
         this.testData = res.data;
       });
+    },
+
+    getSite: function () {
+      let params = {url: this.url}
+      this.$http.get('/api/get', params).then((res) => {
+        console.log(res)
+      })
     }
   }
 }

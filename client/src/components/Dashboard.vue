@@ -1,33 +1,12 @@
 <template>
   <fish-layout class="dashboard" sider="l">
     <nav slot="header">
-      <fish-tag index="0" :color="'teal'" class="tag-name">{{no}}</fish-tag>
-      <fish-input :disabled="true" class="inp-name" v-model="name"></fish-input>
+      <fish-tag index="0" :color="'teal'" class="tag-name">{{siteNo}}</fish-tag>
+      <fish-input :disabled="true" class="inp-name" v-model="siteName"></fish-input>
     </nav>
     <div slot="sider">
       <fish-menu mode="inline" class="left">
-
-        <!-- <fish-option index="0" content="Content"></fish-option>
-        <fish-submenu index="1" mode="inline">
-          <template slot="title">User</template>
-          <fish-option index="1-0" content="Jack"></fish-option>
-          <fish-option index="1-1" content="Lucy"></fish-option>
-          <fish-option index="1-2" content="Active"></fish-option>
-        </fish-submenu>
-        <fish-option index="2" content="Tongji"></fish-option>
-        <fish-submenu index="3" mode="inline">
-          <template slot="title">submenu</template>
-          <fish-option index="3-0" content="Jack"></fish-option>
-          <fish-option index="3-1" content="Lucy"></fish-option>
-          <fish-option index="3-2" content="Active"></fish-option>
-          <fish-submenu index="3-3" mode="inline">
-            <template slot="title">submenu-3</template>
-            <fish-option index="3-3-0" content="Jack"></fish-option>
-            <fish-option index="3-3-1" content="Lucy"></fish-option>
-            <fish-option index="3-3-2" content="Active"></fish-option>
-          </fish-submenu>
-        </fish-submenu> -->
-
+        <!-- Treeview -->
         <fish-submenu v-for="(item, index) in testData" :key="index" :index="index+''" mode="inline" :class="'dep1'">
           <template slot="title">{{item.name}}</template>
           <fish-submenu v-for="(subItem, subIndex) in item.arr" :key="subIndex" :index="index+'-'+subIndex" mode="inline" :class="'dep2'">
@@ -38,46 +17,29 @@
           <fish-option :key="index+'-'+99" :index="index+'-99'" content="+" :class="'dep2'"></fish-option>
         </fish-submenu>
         <fish-option :key="99+''" :index="99+''" content="+" :class="'dep1'"></fish-option>
+        <!-- //Treeview -->
       </fish-menu>
     </div>
     <div slot="content">
       <fish-tabs value="site">
         <!-- Site -->
         <fish-tab-pane label="Site" index="site">
-          <fish-row>
-            <fish-col span="24">
-              <div>
-                <vueCodeDiff :old-string="asis" :new-string="tobe" :context="10" outputFormat="side-by-side" />
-              </div>
-            </fish-col>
-          </fish-row>
-          <fish-row>
-            <fish-col span="22">
-              <!-- <fish-input :disabled="true" class="inp-url wd100" :value="url"></fish-input> -->
-              <fish-input class="inp-url wd100" v-model="url"></fish-input>
-            </fish-col>
-            <fish-col span="2">
-              <fish-button shape="circle" v-on:click="getSite"><i class="fa fa-search"></i></fish-button>
-            </fish-col>
-          </fish-row>
+          <Site></Site>
         </fish-tab-pane>
-
+        
         <!-- Master -->
         <fish-tab-pane label="Master" index="master">
-          <fish-card fluid>
-            <div slot="header">Card Header</div>
-              test
-            <div slot="footer">Card Footer</div>
-          </fish-card>
+          <Master></Master>
         </fish-tab-pane>
 
         <!-- Detail -->
         <fish-tab-pane label="Detail" index="detail">
-          <fish-card fluid>
+          <!-- <fish-card fluid>
             <div slot="header">Card Header</div>
               test
             <div slot="footer">Card Footer</div>
-          </fish-card>
+          </fish-card> -->
+          <Detail></Detail>
         </fish-tab-pane>
       </fish-tabs>
     </div>
@@ -86,13 +48,16 @@
 
 <script>
 import vueCodeDiff from 'vue-code-diff'
+import Site from './Site'
+import Master from './Master'
+import Detail from './Detail'
 
 export default {
   name: 'Dashboard',
   data () {
     return {
-      no: 'no',
-      name: '토익',
+      siteNo: 'siteNo',
+      siteName: '토익',
       asis: 'SiteAsIs',
       tobe: 'SiteToBe',
       url: 'https://naver.com',
@@ -169,12 +134,14 @@ export default {
     }
   },
   components: {
-    vueCodeDiff
+    vueCodeDiff,
+    Site,
+    Master,
+    Detail
   },
   computed: {},
   beforeCreate() {},
   created() {
-    this.selectSite();
   },
   beforeMount() {},
   mounted() {},
@@ -183,29 +150,6 @@ export default {
   beforeDestroy() {},
   destroyed() {},
   methods: {
-    //공통영역
-    setData: function(data) {
-      for(var idx in data) {
-        if(this[idx]) {
-          this[idx] = data[idx];
-        }
-      }
-    },
-
-    //사이트
-    selectSite: function() {
-      this.$http.get('/api/list').then((res) => {
-        console.log(res)
-        this.testData = res.data;
-      });
-    },
-
-    getSite: function () {
-      let params = {url: this.url}
-      this.$http.get('/api/get', params).then((res) => {
-        console.log(res)
-      })
-    }
   }
 }
 </script>
@@ -229,4 +173,16 @@ export default {
   .content {
     padding-top: 20px;
   }
+  .mgl40 {
+	margin-left: 40px;
+}
+.bdl1 {
+	border-left: 1px solid black;
+}
+.bdr1 {
+	border-right: 1px solid black;
+}
+.mgl40 {
+	margin-left: 40px;
+}
 </style>
